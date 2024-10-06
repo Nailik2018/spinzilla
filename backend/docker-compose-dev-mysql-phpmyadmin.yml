@@ -1,0 +1,20 @@
+version: "3"
+services:
+  database:
+    container_name: spinzilla-mysql-container-dev-localhost
+    image: mysql:8.3.0
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "${MYSQL_PORT}:${MYSQL_PORT}"
+  phpmyadmin:
+    container_name: spinzilla-phpmyadmin-container-dev-localhost
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: spinzilla-mysql-container-dev-localhost
+    depends_on:
+      - database
+    ports:
+      - "${PHPMYADMIN_PORT}:80"

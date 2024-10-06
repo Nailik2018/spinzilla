@@ -1,0 +1,21 @@
+# Basis Image
+FROM node:20
+
+# Applikations Verzeichnis
+WORKDIR /usr/src/app
+
+# Kopiert alles ausser Inhalt vom .dockerignore
+COPY . .
+
+# Installation dependencies
+RUN npm install
+
+RUN npm run build
+
+RUN rm -rf ./src
+
+# Port
+EXPOSE 3000
+
+# start
+CMD ["npm", "run", "start:prod"]

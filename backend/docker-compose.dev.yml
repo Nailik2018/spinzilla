@@ -1,0 +1,39 @@
+services:
+  mysql_database:
+    container_name: spinzilla-mysql-container-dev
+    image: mysql:8.3.0
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - CLIENT_ID=${CLIENT_ID}
+      - TENANT_ID=${TENANT_ID}
+    ports:
+      - "${MYSQL_PORT}:${MYSQL_PORT}"
+  phpmyadmin:
+    container_name: spinzilla-phpmyadmin-container-dev
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: spinzilla-mysql-container-dev
+    depends_on:
+      - mysql_database
+    ports:
+      - "${PHPMYADMIN_PORT}:80"
+  nest_api:
+    container_name: spinzilla-nestjs-container-dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    environment:
+      - PORT=${BACKEND_PORT}
+      - NODE_ENV=development
+    volumes:
+      - ./src:/usr/src/app/src

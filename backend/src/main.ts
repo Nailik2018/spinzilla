@@ -3,10 +3,12 @@ import {AppModule} from './app.module';
 import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
 import {VersioningType} from '@nestjs/common';
 import {ConfigService} from '@nestjs/config';
+import {AppCustomLogger} from './app.custom.logger';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
 
+    const logger = new AppCustomLogger('Main');
+    const app = await NestFactory.create(AppModule);
     const configService = app.get(ConfigService);
 
     // @ToDo bleibt in der Entwicklungsphase (Frontend Entwicklung) drin Cors erlauben
@@ -30,6 +32,7 @@ async function bootstrap() {
     // const PORT: number = Number(process.env.BACKEND_PORT) || 8080;
     const PORT: number = Number(process.env.BACKEND_PORT) || 3000;
     await app.listen(PORT, () => {
+        logger.log(`Running NestJS Backend API Mode: ${NODE_ENV} Port: ${PORT}`);
         console.log(`Running NestJS Backend API Mode: ${NODE_ENV} Port: ${PORT}`);
     });
 }

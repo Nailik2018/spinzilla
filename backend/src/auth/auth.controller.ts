@@ -9,12 +9,17 @@ import {
 import {AuthService} from './auth.service';
 import {ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {AuthGuard} from './auth.guard';
+import {GetUserDto} from '../users/dto/get-user.dto';
 
 @ApiTags('Auth')
 @Controller({path: 'auth', version: '1'})
 export class AuthController {
 
-    constructor(private authService: AuthService) {}
+    authService: AuthService
+
+    constructor(authService: AuthService) {
+        this.authService = authService;
+    }
 
     @HttpCode(HttpStatus.OK)
     @Post('login')
@@ -27,10 +32,16 @@ export class AuthController {
         return this.authService.signIn(username, password);
     }
 
+    @Get('profile')
     @ApiBearerAuth()
     @UseGuards(AuthGuard)
-    @Get('profile')
     @ApiOperation({ summary: 'Get user profile' })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "Ok",
+        type: GetUserDto
+    })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     getProfile(@Request() req) {
         return req.user;
     }

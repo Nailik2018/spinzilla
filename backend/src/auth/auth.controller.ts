@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import {AuthService} from './auth.service';
 import {ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags} from '@nestjs/swagger';
-import {Public} from './decorators/public.decorator';
 import {AuthGuard} from './auth.guard';
 
 @ApiTags('Auth')
@@ -17,7 +16,6 @@ export class AuthController {
 
     constructor(private authService: AuthService) {}
 
-    @Public()
     @HttpCode(HttpStatus.OK)
     @Post('login')
     @ApiOperation({ summary: 'User login' })
@@ -32,6 +30,7 @@ export class AuthController {
     @ApiBearerAuth()
     @UseGuards(AuthGuard)
     @Get('profile')
+    @ApiOperation({ summary: 'Get user profile' })
     getProfile(@Request() req) {
         return req.user;
     }

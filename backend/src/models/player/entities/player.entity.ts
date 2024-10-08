@@ -1,14 +1,20 @@
-import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity, PrimaryColumn} from 'typeorm';
 
 @Entity()
 export class Player {
 
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryColumn()
+    licenseNr: number;
 
     @Column()
-    name: string;
+    firstname: string;
 
     @Column()
     lastname: string;
+
+    // @Column()
+    // club: Club;
+
+    // @Column
+    // gender: Gender
 }

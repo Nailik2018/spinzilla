@@ -7,10 +7,16 @@ import {jwtConstants} from './constants';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
+
+    reflector: Reflector;
+    jwtService: JwtService;
+
     constructor(
-        private reflector: Reflector,
-        private jwtService: JwtService,
+        reflector: Reflector,
+        jwtService: JwtService,
     ) {
+        this.reflector = reflector;
+        this.jwtService = jwtService;
     }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {

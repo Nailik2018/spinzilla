@@ -30,8 +30,7 @@ export class AuthGuard implements CanActivate {
             context.getClass(),
         ]);
         if (isPublic) {
-            // 💡 See this condition
-            return true;
+            return true; // Zugriff erlauben, wenn öffentlich
         }
 
         const request = context.switchToHttp().getRequest();

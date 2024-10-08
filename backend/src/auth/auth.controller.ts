@@ -10,6 +10,7 @@ import {AuthService} from './auth.service';
 import {ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {AuthGuard} from './auth.guard';
 import {GetUserDto} from '../users/dto/get-user.dto';
+import {Public} from './decorators/public.decorator';
 
 @ApiTags('Auth')
 @Controller({path: 'auth', version: '1'})
@@ -21,6 +22,7 @@ export class AuthController {
         this.authService = authService;
     }
 
+    @Public()
     @HttpCode(HttpStatus.OK)
     @Post('login')
     @ApiOperation({ summary: 'User login' })

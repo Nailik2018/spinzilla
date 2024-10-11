@@ -15,7 +15,7 @@ import {Public} from '../../auth/decorators/public.decorator';
 @ApiBearerAuth()
 @Roles('admin')
 @ApiTags('Gender')
-@Controller('gender')
+@Controller({path: 'gender', version: '1'})
 export class GenderController {
 
     constructor(private readonly genderService: GenderService) {

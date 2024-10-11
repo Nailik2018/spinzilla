@@ -1,5 +1,6 @@
 import {ApiProperty} from '@nestjs/swagger';
 import {IsNotEmpty, IsNumber, IsString} from 'class-validator';
+import {Gender} from '../../gender/entities/gender.entity';
 
 export class CreatePlayerDto {
 
@@ -17,4 +18,9 @@ export class CreatePlayerDto {
     @IsNotEmpty()
     @IsString()
     lastname: string;
+
+    @ApiProperty({example: "1"})
+    @IsNotEmpty()
+    @IsNumber()
+    gender: Gender;
 }

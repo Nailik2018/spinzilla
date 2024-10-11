@@ -1,6 +1,7 @@
 import {ApiProperty, PartialType} from '@nestjs/swagger';
 import { CreatePlayerDto } from './create-player.dto';
 import {IsNotEmpty, IsNumber, IsString} from 'class-validator';
+import {Gender} from '../../gender/entities/gender.entity';
 
 export class UpdatePlayerDto extends PartialType(CreatePlayerDto) {
 
@@ -18,4 +19,9 @@ export class UpdatePlayerDto extends PartialType(CreatePlayerDto) {
     @IsNotEmpty()
     @IsString()
     lastname: string;
+
+    @ApiProperty({example: "1"})
+    @IsNotEmpty()
+    @IsNumber()
+    gender: Gender;
 }

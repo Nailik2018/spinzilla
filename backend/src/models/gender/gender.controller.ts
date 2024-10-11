@@ -1,33 +1,33 @@
 import {Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, HttpStatus} from '@nestjs/common';
-import {PlayerService} from './player.service';
-import {CreatePlayerDto} from './dto/create-player.dto';
-import {UpdatePlayerDto} from './dto/update-player.dto';
+import {GenderService} from './gender.service';
+import {CreateGenderDto} from './dto/create-gender.dto';
+import {UpdateGenderDto} from './dto/update-gender.dto';
 import {ApiBearerAuth, ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {Roles} from '../../auth/decorators/roles.decotrator';
-import {Public} from '../../auth/decorators/public.decorator';
-import {Player} from './entities/player.entity';
-import {GetPlayerDto} from './dto/get-player.dto';
+import {GetGenderDto} from './dto/get-gender.dto';
 import {BadRequestResponse} from '../../common/doc-response/badRequestResponse';
 import {ForbiddenResponse} from '../../common/doc-response/forbiddenResponse';
+import {Gender} from './entities/gender.entity';
 import {DeleteResponseOk} from '../../common/doc-response/deleteResponseOk';
-import {NotFoundResponse} from "../../common/doc-response/notFoundResponse";
+import {NotFoundResponse} from '../../common/doc-response/notFoundResponse';
+import {Public} from '../../auth/decorators/public.decorator';
 
 @ApiBearerAuth()
 @Roles('admin')
-@ApiTags('Player')
-@Controller({path: 'player', version: '1'})
-export class PlayerController {
+@ApiTags('Gender')
+@Controller('gender')
+export class GenderController {
 
-    constructor(private readonly playerService: PlayerService) {
+    constructor(private readonly genderService: GenderService) {
     }
 
     @Post()
-    @ApiOperation({summary: 'Create new player'})
+    @ApiOperation({summary: 'Create new gender type'})
     @UsePipes(new ValidationPipe({transform: true}))
     @ApiResponse({
         status: HttpStatus.CREATED,
         description: "Created",
-        type: GetPlayerDto
+        type: GetGenderDto
     })
     @ApiResponse({
         status: HttpStatus.BAD_REQUEST,
@@ -39,47 +39,47 @@ export class PlayerController {
         description: "Forbidden",
         type: ForbiddenResponse
     })
-    create(@Body() createPlayerDto: CreatePlayerDto): Promise<Player> {
-        return this.playerService.create(createPlayerDto);
+    create(@Body() createGenderDto: CreateGenderDto): Promise<Gender> {
+        return this.genderService.create(createGenderDto);
     }
 
     @Get()
     @Public()
-    @ApiOperation({summary: 'Get all players'})
+    @ApiOperation({summary: 'Get all genders'})
     @ApiResponse({
-        status: HttpStatus.CREATED,
-        description: "Created",
-        type: GetPlayerDto,
+        status: HttpStatus.OK,
+        description: "Ok",
+        type: GetGenderDto,
         isArray: true
     })
-    findAll(): Promise<Player[]> {
-        return this.playerService.findAll();
+    findAll(): Promise<Gender[]> {
+        return this.genderService.findAll();
     }
 
     @Get(':id')
     @Public()
-    @ApiOperation({summary: 'Get a player'})
+    @ApiOperation({summary: 'Get a gender'})
     @ApiResponse({
-        status: HttpStatus.CREATED,
-        description: "Created",
-        type: GetPlayerDto
+        status: HttpStatus.OK,
+        description: "Ok",
+        type: GetGenderDto
     })
     @ApiResponse({
         status: HttpStatus.NOT_FOUND,
         description: "Not found",
         type: NotFoundResponse
     })
-    findOne(@Param('id') id: string): Promise<Player> {
-        return this.playerService.findOne(+id);
+    findOne(@Param('id') id: string): Promise<Gender> {
+        return this.genderService.findOne(+id);
     }
 
     @Patch(':id')
-    @ApiOperation({summary: 'Update a player'})
+    @ApiOperation({summary: 'Update a gender'})
     @UsePipes(new ValidationPipe({transform: true}))
     @ApiResponse({
-        status: HttpStatus.CREATED,
-        description: "Created",
-        type: GetPlayerDto
+        status: HttpStatus.OK,
+        description: "Ok",
+        type: GetGenderDto
     })
     @ApiResponse({
         status: HttpStatus.NOT_FOUND,
@@ -91,20 +91,17 @@ export class PlayerController {
         description: "Forbidden",
         type: ForbiddenResponse
     })
-    update(@Param('id') id: string, @Body() updatePlayerDto: UpdatePlayerDto): Promise<Player> {
-        return this.playerService.update(+id, updatePlayerDto);
+    update(@Param('id') id: string, @Body() updateGenderDto: UpdateGenderDto): Promise<Gender> {
+        return this.genderService.update(+id, updateGenderDto);
     }
 
+    @Delete(':id')
+    @ApiOperation({summary: 'Delete a gender'})
     @ApiResponse({
         status: HttpStatus.OK,
         description: "Ok",
         type: DeleteResponseOk
     })
-    @Delete(':id')
-    @ApiBearerAuth()
-    @Roles('admin')
-    @ApiOperation({summary: 'Get a player'})
-
     @ApiResponse({
         status: HttpStatus.NOT_FOUND,
         description: "Not found",
@@ -116,6 +113,6 @@ export class PlayerController {
         type: ForbiddenResponse
     })
     remove(@Param('id') id: string): Promise<DeleteResponseOk> {
-        return this.playerService.remove(+id);
+        return this.genderService.remove(+id);
     }
 }

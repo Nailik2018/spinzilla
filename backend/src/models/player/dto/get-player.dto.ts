@@ -1,4 +1,5 @@
 import {ApiProperty} from '@nestjs/swagger';
+import {Gender} from '../../gender/entities/gender.entity';
 
 export class GetPlayerDto {
 
@@ -10,4 +11,7 @@ export class GetPlayerDto {
 
     @ApiProperty({example: "Mustermann"})
     lastname: string;
+
+    @ApiProperty({example: 1})
+    gender: Gender;
 }

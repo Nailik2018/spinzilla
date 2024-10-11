@@ -1,4 +1,5 @@
-import {Column, Entity, PrimaryColumn} from 'typeorm';
+import {Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn} from 'typeorm';
+import {Gender} from '../../gender/entities/gender.entity';
 
 @Entity()
 export class Player {
@@ -15,6 +16,11 @@ export class Player {
     // @Column()
     // club: Club;
 
-    // @Column
-    // gender: Gender
+    @ManyToOne(() => Gender, gender => gender.players,
+        {
+            cascade: true,
+            eager: true // Lädt die Beziehung automatisch, wenn die Entität geladen wird
+        })
+    @JoinColumn({name: "gender_id"})
+    gender: Gender;
 }

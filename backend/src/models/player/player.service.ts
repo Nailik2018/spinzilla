@@ -5,12 +5,12 @@ import {Player} from './entities/player.entity';
 import {DeleteResult, Repository} from 'typeorm';
 import {InjectRepository} from '@nestjs/typeorm';
 import {AppCustomLogger} from '../../app.custom.logger';
-import {DeleteResponseOk} from "../../common/doc-response/deleteResponseOk";
+import {DeleteResponseOk} from '../../common/doc-response/deleteResponseOk';
 
 @Injectable()
 export class PlayerService {
 
-    private readonly logger = new AppCustomLogger(PlayerService.name);
+    private readonly logger: AppCustomLogger = new AppCustomLogger(PlayerService.name);
 
     constructor(@InjectRepository(Player) private readonly playerRepository: Repository<Player>) {
     }
@@ -63,7 +63,7 @@ export class PlayerService {
         }
     }
 
-    async remove(id: number) {
+    async remove(id: number): Promise<DeleteResponseOk> {
         try {
             const deleteResult: DeleteResult = await this.playerRepository.delete(id);
             if (deleteResult.affected !== 1) {

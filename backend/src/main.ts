@@ -22,9 +22,11 @@ async function bootstrap() {
 
     const config = new DocumentBuilder()
         .addBearerAuth()
+        // .addBasicAuth({type: 'http', scheme: 'basic', description: 'Basic Auth', name: 'basic'})
         .setTitle('Spinzilla')
         .setDescription('Table Tennis Backend API System')
         .setVersion('1.0.0')
+        .setContact('Contact', 'https://ttpoint.ch', 'info@ttpoint.ch')
         .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup(process.env.BACKEND_SWAGGER_PATH, app, document);

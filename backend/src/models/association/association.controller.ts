@@ -1,33 +1,33 @@
 import {Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, HttpStatus} from '@nestjs/common';
-import {PlayerService} from './player.service';
-import {CreatePlayerDto} from './dto/create-player.dto';
-import {UpdatePlayerDto} from './dto/update-player.dto';
+import {AssociationService} from './association.service';
+import {CreateAssociationDto} from './dto/create-association.dto';
+import {UpdateAssociationDto} from './dto/update-association.dto';
 import {ApiBearerAuth, ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {Roles} from '../../auth/decorators/roles.decotrator';
 import {Public} from '../../auth/decorators/public.decorator';
-import {Player} from './entities/player.entity';
-import {GetPlayerDto} from './dto/get-player.dto';
-import {BadRequestResponse} from '../../common/doc-response/badRequestResponse';
-import {ForbiddenResponse} from '../../common/doc-response/forbiddenResponse';
+import {GetAssociationDto} from './dto/get-association.dto';
 import {DeleteResponseOk} from '../../common/doc-response/deleteResponseOk';
+import {Association} from './entities/association.entity';
+import {ForbiddenResponse} from '../../common/doc-response/forbiddenResponse';
 import {NotFoundResponse} from '../../common/doc-response/notFoundResponse';
+import {BadRequestResponse} from '../../common/doc-response/badRequestResponse';
 
 @ApiBearerAuth()
 @Roles('admin')
-@ApiTags('Player')
-@Controller({path: 'player', version: '1'})
-export class PlayerController {
+@ApiTags('Association')
+@Controller({path: 'association', version: '1'})
+export class AssociationController {
 
-    constructor(private readonly playerService: PlayerService) {
+    constructor(private readonly associationService: AssociationService) {
     }
 
     @Post()
-    @ApiOperation({summary: 'Create new player'})
+    @ApiOperation({summary: 'Create new association'})
     @UsePipes(new ValidationPipe({transform: true}))
     @ApiResponse({
         status: HttpStatus.CREATED,
         description: "Created",
-        type: GetPlayerDto
+        type: GetAssociationDto
     })
     @ApiResponse({
         status: HttpStatus.BAD_REQUEST,
@@ -35,51 +35,51 @@ export class PlayerController {
         type: BadRequestResponse
     })
     @ApiResponse({
-        status: HttpStatus.NOT_ACCEPTABLE,
+        status: HttpStatus.FORBIDDEN,
         description: "Forbidden",
         type: ForbiddenResponse
     })
-    create(@Body() createPlayerDto: CreatePlayerDto): Promise<Player> {
-        return this.playerService.create(createPlayerDto);
+    create(@Body() createAssociationDto: CreateAssociationDto): Promise<Association> {
+        return this.associationService.create(createAssociationDto);
     }
 
     @Get()
     @Public()
-    @ApiOperation({summary: 'Get all players'})
+    @ApiOperation({summary: 'Get all associations'})
     @ApiResponse({
-        status: HttpStatus.CREATED,
+        status: HttpStatus.OK,
         description: "Created",
-        type: GetPlayerDto,
+        type: GetAssociationDto,
         isArray: true
     })
-    findAll(): Promise<Player[]> {
-        return this.playerService.findAll();
+    findAll(): Promise<Association[]> {
+        return this.associationService.findAll();
     }
 
     @Get(':id')
     @Public()
-    @ApiOperation({summary: 'Get a player'})
+    @ApiOperation({summary: 'Get a association'})
     @ApiResponse({
-        status: HttpStatus.CREATED,
+        status: HttpStatus.OK,
         description: "Created",
-        type: GetPlayerDto
+        type: GetAssociationDto
     })
     @ApiResponse({
         status: HttpStatus.NOT_FOUND,
         description: "Not found",
         type: NotFoundResponse
     })
-    findOne(@Param('id') id: string): Promise<Player> {
-        return this.playerService.findOne(+id);
+    findOne(@Param('id') id: string): Promise<Association> {
+        return this.associationService.findOne(+id);
     }
 
     @Patch(':id')
-    @ApiOperation({summary: 'Update a player'})
+    @ApiOperation({summary: 'Update a association'})
     @UsePipes(new ValidationPipe({transform: true}))
     @ApiResponse({
-        status: HttpStatus.CREATED,
+        status: HttpStatus.OK,
         description: "Created",
-        type: GetPlayerDto
+        type: GetAssociationDto
     })
     @ApiResponse({
         status: HttpStatus.NOT_FOUND,
@@ -91,20 +91,17 @@ export class PlayerController {
         description: "Forbidden",
         type: ForbiddenResponse
     })
-    update(@Param('id') id: string, @Body() updatePlayerDto: UpdatePlayerDto): Promise<Player> {
-        return this.playerService.update(+id, updatePlayerDto);
+    update(@Param('id') id: string, @Body() updateAssociationDto: UpdateAssociationDto): Promise<Association> {
+        return this.associationService.update(+id, updateAssociationDto);
     }
 
+    @Delete(':id')
+    @ApiOperation({summary: 'Delete a association'})
     @ApiResponse({
         status: HttpStatus.OK,
         description: "Ok",
         type: DeleteResponseOk
     })
-    @Delete(':id')
-    @ApiBearerAuth()
-    @Roles('admin')
-    @ApiOperation({summary: 'Get a player'})
-
     @ApiResponse({
         status: HttpStatus.NOT_FOUND,
         description: "Not found",
@@ -116,6 +113,6 @@ export class PlayerController {
         type: ForbiddenResponse
     })
     remove(@Param('id') id: string): Promise<DeleteResponseOk> {
-        return this.playerService.remove(+id);
+        return this.associationService.remove(+id);
     }
 }

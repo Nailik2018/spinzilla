@@ -1,4 +1,16 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, HttpStatus} from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+    UsePipes,
+    ValidationPipe,
+    HttpStatus,
+    UseGuards
+} from '@nestjs/common';
 import {AssociationService} from './association.service';
 import {CreateAssociationDto} from './dto/create-association.dto';
 import {UpdateAssociationDto} from './dto/update-association.dto';
@@ -11,6 +23,8 @@ import {Association} from './entities/association.entity';
 import {ForbiddenResponse} from '../../common/doc-response/forbiddenResponse';
 import {NotFoundResponse} from '../../common/doc-response/notFoundResponse';
 import {BadRequestResponse} from '../../common/doc-response/badRequestResponse';
+import {AuthGuard} from '../../auth/auth.guard';
+import {RolesGuard} from '../../auth/roles.guard';
 
 @ApiBearerAuth()
 @Roles('admin')
@@ -24,6 +38,7 @@ export class AssociationController {
     @Post()
     @ApiOperation({summary: 'Create new association'})
     @UsePipes(new ValidationPipe({transform: true}))
+    @UseGuards(AuthGuard, RolesGuard)
     @ApiResponse({
         status: HttpStatus.CREATED,
         description: "Created",
@@ -61,7 +76,7 @@ export class AssociationController {
     @ApiOperation({summary: 'Get a association'})
     @ApiResponse({
         status: HttpStatus.OK,
-        description: "Created",
+        description: "Ok",
         type: GetAssociationDto
     })
     @ApiResponse({
@@ -76,9 +91,10 @@ export class AssociationController {
     @Patch(':id')
     @ApiOperation({summary: 'Update a association'})
     @UsePipes(new ValidationPipe({transform: true}))
+    @UseGuards(AuthGuard, RolesGuard)
     @ApiResponse({
         status: HttpStatus.OK,
-        description: "Created",
+        description: "Ok",
         type: GetAssociationDto
     })
     @ApiResponse({
@@ -97,6 +113,7 @@ export class AssociationController {
 
     @Delete(':id')
     @ApiOperation({summary: 'Delete a association'})
+    @UseGuards(AuthGuard, RolesGuard)
     @ApiResponse({
         status: HttpStatus.OK,
         description: "Ok",

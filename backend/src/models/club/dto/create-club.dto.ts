@@ -1,5 +1,5 @@
 import {ApiProperty} from '@nestjs/swagger';
-import {IsNotEmpty, IsString} from 'class-validator';
+import {IsNotEmpty, IsNumber, IsString} from 'class-validator';
 import {Association} from '../../association/entities/association.entity';
 
 export class CreateClubDto {
@@ -11,6 +11,6 @@ export class CreateClubDto {
 
     @ApiProperty({example: 1})
     @IsNotEmpty()
-    @IsString()
+    @IsNumber()
     association: Association;
 }

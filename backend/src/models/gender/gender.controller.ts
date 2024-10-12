@@ -1,4 +1,16 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, HttpStatus} from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+    UsePipes,
+    ValidationPipe,
+    HttpStatus,
+    UseGuards
+} from '@nestjs/common';
 import {GenderService} from './gender.service';
 import {CreateGenderDto} from './dto/create-gender.dto';
 import {UpdateGenderDto} from './dto/update-gender.dto';
@@ -11,6 +23,8 @@ import {Gender} from './entities/gender.entity';
 import {DeleteResponseOk} from '../../common/doc-response/deleteResponseOk';
 import {NotFoundResponse} from '../../common/doc-response/notFoundResponse';
 import {Public} from '../../auth/decorators/public.decorator';
+import {AuthGuard} from '../../auth/auth.guard';
+import {RolesGuard} from '../../auth/roles.guard';
 
 @ApiBearerAuth()
 @Roles('admin')
@@ -24,6 +38,7 @@ export class GenderController {
     @Post()
     @ApiOperation({summary: 'Create new gender type'})
     @UsePipes(new ValidationPipe({transform: true}))
+    @UseGuards(AuthGuard, RolesGuard)
     @ApiResponse({
         status: HttpStatus.CREATED,
         description: "Created",
@@ -76,6 +91,7 @@ export class GenderController {
     @Patch(':id')
     @ApiOperation({summary: 'Update a gender'})
     @UsePipes(new ValidationPipe({transform: true}))
+    @UseGuards(AuthGuard, RolesGuard)
     @ApiResponse({
         status: HttpStatus.OK,
         description: "Ok",
@@ -97,6 +113,7 @@ export class GenderController {
 
     @Delete(':id')
     @ApiOperation({summary: 'Delete a gender'})
+    @UseGuards(AuthGuard, RolesGuard)
     @ApiResponse({
         status: HttpStatus.OK,
         description: "Ok",

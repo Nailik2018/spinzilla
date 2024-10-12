@@ -1,4 +1,16 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, HttpStatus} from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+    UsePipes,
+    ValidationPipe,
+    HttpStatus,
+    UseGuards
+} from '@nestjs/common';
 import {PlayerService} from './player.service';
 import {CreatePlayerDto} from './dto/create-player.dto';
 import {UpdatePlayerDto} from './dto/update-player.dto';
@@ -11,6 +23,8 @@ import {BadRequestResponse} from '../../common/doc-response/badRequestResponse';
 import {ForbiddenResponse} from '../../common/doc-response/forbiddenResponse';
 import {DeleteResponseOk} from '../../common/doc-response/deleteResponseOk';
 import {NotFoundResponse} from '../../common/doc-response/notFoundResponse';
+import {AuthGuard} from '../../auth/auth.guard';
+import {RolesGuard} from '../../auth/roles.guard';
 
 @ApiBearerAuth()
 @Roles('admin')
@@ -24,6 +38,7 @@ export class PlayerController {
     @Post()
     @ApiOperation({summary: 'Create new player'})
     @UsePipes(new ValidationPipe({transform: true}))
+    @UseGuards(AuthGuard, RolesGuard)
     @ApiResponse({
         status: HttpStatus.CREATED,
         description: "Created",
@@ -76,6 +91,7 @@ export class PlayerController {
     @Patch(':id')
     @ApiOperation({summary: 'Update a player'})
     @UsePipes(new ValidationPipe({transform: true}))
+    @UseGuards(AuthGuard, RolesGuard)
     @ApiResponse({
         status: HttpStatus.CREATED,
         description: "Created",
@@ -95,16 +111,14 @@ export class PlayerController {
         return this.playerService.update(+id, updatePlayerDto);
     }
 
+    @Delete(':id')
+    @UseGuards(AuthGuard, RolesGuard)
+    @ApiOperation({summary: 'Get a player'})
     @ApiResponse({
         status: HttpStatus.OK,
         description: "Ok",
         type: DeleteResponseOk
     })
-    @Delete(':id')
-    @ApiBearerAuth()
-    @Roles('admin')
-    @ApiOperation({summary: 'Get a player'})
-
     @ApiResponse({
         status: HttpStatus.NOT_FOUND,
         description: "Not found",

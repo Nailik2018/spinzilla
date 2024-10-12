@@ -1,4 +1,16 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, HttpStatus} from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+    UsePipes,
+    ValidationPipe,
+    HttpStatus,
+    UseGuards
+} from '@nestjs/common';
 import {ClubService} from './club.service';
 import {CreateClubDto} from './dto/create-club.dto';
 import {UpdateClubDto} from './dto/update-club.dto';
@@ -8,9 +20,13 @@ import {Public} from '../../auth/decorators/public.decorator';
 import {Club} from './entities/club.entity';
 import {GetClubDto} from './dto/get-club.dto';
 import {DeleteResponseOk} from '../../common/doc-response/deleteResponseOk';
+import {NotFoundResponse} from '../../common/doc-response/notFoundResponse';
+import {ForbiddenResponse} from '../../common/doc-response/forbiddenResponse';
+import {AuthGuard} from '../../auth/auth.guard';
+import {RolesGuard} from '../../auth/roles.guard';
 
-@Roles('admin')
 @ApiBearerAuth()
+@Roles('admin')
 @ApiTags('Club')
 @Controller({path: 'club', version: '1'})
 export class ClubController {
@@ -24,6 +40,7 @@ export class ClubController {
     @Post()
     @ApiOperation({summary: 'Create new club'})
     @UsePipes(new ValidationPipe({transform: true}))
+    @UseGuards(AuthGuard, RolesGuard)
     @ApiResponse({
       status: HttpStatus.CREATED,
       description: "Created",
@@ -61,6 +78,7 @@ export class ClubController {
     @Patch(':id')
     @ApiOperation({summary: 'update a club'})
     @UsePipes(new ValidationPipe({transform: true}))
+    @UseGuards(AuthGuard, RolesGuard)
     @ApiResponse({
       status: HttpStatus.OK,
       description: "Ok",
@@ -72,10 +90,21 @@ export class ClubController {
 
     @Delete(':id')
     @ApiOperation({summary: 'Delete a club'})
+    @UseGuards(AuthGuard, RolesGuard)
     @ApiResponse({
       status: HttpStatus.OK,
       description: "Ok",
       type: DeleteResponseOk
+    })
+    @ApiResponse({
+        status: HttpStatus.NOT_FOUND,
+        description: "Not found",
+        type: NotFoundResponse
+    })
+    @ApiResponse({
+        status: HttpStatus.FORBIDDEN,
+        description: "Forbidden",
+        type: ForbiddenResponse
     })
     remove(@Param('id') id: string) {
         return this.clubService.remove(+id);

@@ -1,4 +1,5 @@
-import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
+import {Club} from '../../club/entities/club.entity';
 
 @Entity()
 export class Association {
@@ -12,4 +13,6 @@ export class Association {
     @Column()
     displayName: string;
 
+    @OneToMany(() => Club, (club: Club) => club.association)
+    clubs: Club[];
 }

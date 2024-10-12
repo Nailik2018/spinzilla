@@ -6,6 +6,7 @@ import {UsersModule} from './users/users.module';
 import {PlayerModule} from './models/player/player.module';
 import { GenderModule } from './models/gender/gender.module';
 import { AssociationModule } from './models/association/association.module';
+import { ClubModule } from './models/club/club.module';
 
 @Module({
     imports: [
@@ -31,6 +32,7 @@ import { AssociationModule } from './models/association/association.module';
         PlayerModule,
         GenderModule,
         AssociationModule,
+        ClubModule,
     ],
     controllers: [],
     providers: [],

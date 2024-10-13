@@ -9,7 +9,7 @@ import {
     UsePipes,
     ValidationPipe,
     HttpStatus,
-    UseGuards
+    UseGuards, NotFoundException
 } from '@nestjs/common';
 import {AssociationService} from './association.service';
 import {CreateAssociationDto} from './dto/create-association.dto';
@@ -25,6 +25,8 @@ import {NotFoundResponse} from '../../common/doc-response/notFoundResponse';
 import {BadRequestResponse} from '../../common/doc-response/badRequestResponse';
 import {AuthGuard} from '../../auth/auth.guard';
 import {RolesGuard} from '../../auth/roles.guard';
+import {Club} from '../club/entities/club.entity';
+import {GetClubDto} from '../club/dto/get-club.dto';
 
 @ApiBearerAuth()
 @Roles('admin')
@@ -131,5 +133,27 @@ export class AssociationController {
     })
     remove(@Param('id') id: string): Promise<DeleteResponseOk> {
         return this.associationService.remove(+id);
+    }
+
+    @Get(':id/clubs')
+    @Public()
+    @ApiOperation({ summary: 'Get all clubs of a specific association' })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "Ok",
+        type: GetClubDto,
+        isArray: true
+    })
+    @ApiResponse({
+        status: HttpStatus.NOT_FOUND,
+        description: "Not found",
+        type: NotFoundResponse
+    })
+    async findClubs(@Param('id') id: string): Promise<Club[]> {
+        const clubs: Club[] = await this.associationService.findAllClubsByAssociationId(+id);
+        if (!clubs) {
+            throw new NotFoundException(`Clubs for association with ID ${id} not found`);
+        }
+        return clubs;
     }
 }

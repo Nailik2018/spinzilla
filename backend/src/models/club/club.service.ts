@@ -1,4 +1,4 @@
-import {BadRequestException, Injectable} from '@nestjs/common';
+import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
 import {CreateClubDto} from './dto/create-club.dto';
 import {UpdateClubDto} from './dto/update-club.dto';
 import {Club} from './entities/club.entity';
@@ -75,5 +75,18 @@ export class ClubService {
             this.logger.error(`The club with the ID ${id} could not be deleted! [delete] ${error.code}`);
             throw new BadRequestException(`The club with the ID ${id} could not be deleted!`);
         }
+    }
+
+    async findAllClubsByAssociationId(associationId: number): Promise<Club[]> {
+        const clubs: Club[] = await this.clubRepository.find({
+            where: { association: { id: associationId } }, // Hier filtern wir die Clubs anhand der associationId
+            // relations: ['association'], // Optional: Lade die zugehörige Association, falls benötigt
+        });
+
+        if (!clubs.length) { // Überprüfe, ob Clubs gefunden wurden
+            throw new NotFoundException(`No clubs found for association with ID ${associationId}`);
+        }
+
+        return clubs; // Gebe die gefundenen Clubs zurück
     }
 }

@@ -1,4 +1,4 @@
-import {BadRequestException, Injectable} from '@nestjs/common';
+import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
 import {CreateAssociationDto} from './dto/create-association.dto';
 import {UpdateAssociationDto} from './dto/update-association.dto';
 import {Association} from './entities/association.entity';
@@ -6,6 +6,7 @@ import {AppCustomLogger} from '../../app.custom.logger';
 import {InjectRepository} from '@nestjs/typeorm';
 import {DeleteResult, Repository} from 'typeorm';
 import {DeleteResponseOk} from '../../common/doc-response/deleteResponseOk';
+import {Club} from "../club/entities/club.entity";
 
 @Injectable()
 export class AssociationService {
@@ -75,5 +76,19 @@ export class AssociationService {
             this.logger.error(`The association with the ID ${id} could not be deleted! [delete] ${error.code}`);
             throw new BadRequestException(`The association with the ID ${id} could not be deleted!`);
         }
+    }
+
+    async findAllClubsByAssociationId(id: number): Promise<Club[]> {
+        this.logger.log(`The clubs with the associationId ${id} was successfully deleted! [delete]`);
+        const association = await this.associationRepository.findOne({
+            where: { id },
+            relations: ['clubs'], // Lade die Clubs zusammen mit der Association
+        });
+
+        if (!association) {
+            throw new NotFoundException(`Association with ID ${id} not found`);
+        }
+
+        return association.clubs; // Gebe die Clubs der gefundenen Association zurück
     }
 }

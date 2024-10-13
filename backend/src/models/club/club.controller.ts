@@ -42,9 +42,9 @@ export class ClubController {
     @UsePipes(new ValidationPipe({transform: true}))
     @UseGuards(AuthGuard, RolesGuard)
     @ApiResponse({
-      status: HttpStatus.CREATED,
-      description: "Created",
-      type: GetClubDto
+        status: HttpStatus.CREATED,
+        description: "Created",
+        type: GetClubDto
     })
     create(@Body() createClubDto: CreateClubDto) {
         return this.clubService.create(createClubDto);
@@ -54,10 +54,10 @@ export class ClubController {
     @Public()
     @ApiOperation({summary: 'Get all clubs'})
     @ApiResponse({
-      status: HttpStatus.OK,
-      description: "Ok",
-      type: GetClubDto,
-      isArray: true
+        status: HttpStatus.OK,
+        description: "Ok",
+        type: GetClubDto,
+        isArray: true
     })
     findAll(): Promise<Club[]> {
         return this.clubService.findAll();
@@ -67,9 +67,9 @@ export class ClubController {
     @Public()
     @ApiOperation({summary: 'Get a club'})
     @ApiResponse({
-      status: HttpStatus.OK,
-      description: "Ok",
-      type: GetClubDto
+        status: HttpStatus.OK,
+        description: "Ok",
+        type: GetClubDto
     })
     findOne(@Param('id') id: string): Promise<Club> {
         return this.clubService.findOne(+id);
@@ -80,9 +80,9 @@ export class ClubController {
     @UsePipes(new ValidationPipe({transform: true}))
     @UseGuards(AuthGuard, RolesGuard)
     @ApiResponse({
-      status: HttpStatus.OK,
-      description: "Ok",
-      type: GetClubDto
+        status: HttpStatus.OK,
+        description: "Ok",
+        type: GetClubDto
     })
     update(@Param('id') id: string, @Body() updateClubDto: UpdateClubDto) {
         return this.clubService.update(+id, updateClubDto);
@@ -92,9 +92,9 @@ export class ClubController {
     @ApiOperation({summary: 'Delete a club'})
     @UseGuards(AuthGuard, RolesGuard)
     @ApiResponse({
-      status: HttpStatus.OK,
-      description: "Ok",
-      type: DeleteResponseOk
+        status: HttpStatus.OK,
+        description: "Ok",
+        type: DeleteResponseOk
     })
     @ApiResponse({
         status: HttpStatus.NOT_FOUND,
@@ -108,5 +108,23 @@ export class ClubController {
     })
     remove(@Param('id') id: string) {
         return this.clubService.remove(+id);
+    }
+
+    @Get('association/:associationId')
+    @Public()
+    @ApiOperation({ summary: 'Get all clubs of a specific association' })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: "Ok",
+        type: GetClubDto,
+        isArray: true
+    })
+    @ApiResponse({
+        status: HttpStatus.NOT_FOUND,
+        description: "Not found",
+        type: NotFoundResponse
+    })
+    async findClubsByAssociationId(@Param('associationId') associationId: string): Promise<Club[]> {
+        return this.clubService.findAllClubsByAssociationId(+associationId);
     }
 }

@@ -1,7 +1,14 @@
-<div class="association-container page-container container-fluid d-flex flex-row justify-content-around align-items-center flex-wrap">
-  <ul *ngIf="!associationService.loading()" class="d-flex flex-row flex-wrap">
+<div class="association-container page-container container-fluid">
+  <!-- Überschrift zentrieren -->
+  <div class="row">
+    <div class="col-lg-12 mb-5">
+      <h1 class="d-flex flex-column justify-content-start">Übersicht der Verbände</h1>
+    </div>
+  </div>
+  <!-- Karten-Container -->
+  <div class="row d-flex flex-row justify-content-around align-items-center flex-wrap" *ngIf="!associationService.loading()">
     <div *ngFor="let association of associationService.associations()" class="col-lg-4 m-auto mb-5">
       <app-association-card [association]="association"></app-association-card>
     </div>
-  </ul>
+  </div>
 </div>

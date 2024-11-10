@@ -1,8 +1,8 @@
 <div class="association-card-container container">
-  <div class="card">
+  <div class="card card-hover">
     <div class="card-body">
-      <h5 class="card-title d-flex justify-content-center">{{ association.name }}</h5>
-      <p class="card-text d-flex justify-content-center">{{ association.displayName }}</p>
+      <h4 class="card-title d-flex justify-content-center" [routerLink]="['/association', association.displayName]"><strong>{{ association.displayName }}</strong></h4>
+      <p class="card-text d-flex justify-content-center">{{ association.name }}</p>
     </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import {Injectable, signal} from '@angular/core';
+import {Injectable, signal, WritableSignal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {IAssociation} from '../models/IAssociation';
 
@@ -19,8 +19,8 @@ export class AssociationService {
   // }
 
   private apiUrl = 'http://localhost:3000/api/v1/association';
-  associations = signal<IAssociation[]>([]); // Initialwert ist ein leeres Array
-  loading = signal<boolean>(false);
+  associations: WritableSignal<IAssociation[]> = signal<IAssociation[]>([]); // Initialwert ist ein leeres Array
+  loading: WritableSignal<boolean> = signal<boolean>(false);
 
   // Daten holen und das Signal aktualisieren
   getAllAssociations() {

@@ -1,0 +1,7 @@
+<div class="association-container page-container container-fluid d-flex flex-row justify-content-around align-items-center flex-wrap">
+  <ul *ngIf="!associationService.loading()" class="d-flex flex-row flex-wrap">
+    <div *ngFor="let association of associationService.associations()" class="col-lg-4 m-auto mb-5">
+      <app-association-card [association]="association"></app-association-card>
+    </div>
+  </ul>
+</div>

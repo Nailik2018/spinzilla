@@ -1,0 +1,14 @@
+<nav>
+  <div (click)="toggleMenu()">
+    <label for="hamburg" class="hamburg">
+      <span class="line"></span>
+      <span class="line"></span>
+      <span class="line"></span>
+    </label>
+  </div>
+  <ul [ngClass]="{ 'show': showMenu }">
+    <li *ngFor="let item of navItems">
+      <a routerLink="{{ item.link }}">{{ item.label }}</a>
+    </li>
+  </ul>
+</nav>

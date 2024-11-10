@@ -1,0 +1,121 @@
+@import '_variables';
+
+$fullscreen-padding: calc((100vh - 350px)/2);
+$distance-to_nav: 50px;
+
+/**
+#######################################################################################################################
+#######################################################################################################################
+Navigation start
+*/
+nav {
+  background-color: $neonBlue;
+  color: $black;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  .hamburg {
+    display: block;
+    height: 50px;
+    width: 75px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 4px;
+    transition: border-radius 0.5s;
+    left: 0;
+
+    .line {
+      position: absolute;
+      left: 10px;
+      height: 4px;
+      width: 55px;
+      background: $cyanBlue;
+      border-radius: 2px;
+      display: block;
+      transition: 0.5s;
+      transform-origin: center;
+    }
+
+    .line:nth-child(1) {
+      top: 12px;
+    }
+
+    .line:nth-child(2) {
+      top: 24px;
+    }
+
+    .line:nth-child(3) {
+      top: 36px;
+    }
+  }
+  .hamburg.checked
+  .line:nth-child(1){
+    transform: translateY(12px) rotate(-45deg);
+  }
+
+  .hamburg.checked
+  .line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburg.checked
+  .line:nth-child(3) {
+    transform: translateY(-12px) rotate(45deg);
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    a {
+      color: $cyanBlue;
+      text-decoration: none;
+      padding: 1rem;
+      display: block;
+    }
+    a:hover {
+      background-color: $gray;
+      color: $cyanBlue;
+    }
+  }
+}
+
+nav ul {
+  display: none;
+}
+
+nav ul.show {
+  display: block;
+}
+
+/**
+Navigation ende
+#######################################################################################################################
+#######################################################################################################################
+*/
+
+/**
+#######################################################################################################################
+#######################################################################################################################
+page start
+*/
+
+.page-container {
+  min-height: calc(100% - $distance-to_nav);
+  height: 100%;
+  width: 100%;
+  //background: purple;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+/**
+page ende
+#######################################################################################################################
+#######################################################################################################################
+*/

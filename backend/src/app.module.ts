@@ -4,9 +4,9 @@ import {TypeOrmModule} from '@nestjs/typeorm';
 import {AuthModule} from './auth/auth.module';
 import {UsersModule} from './users/users.module';
 import {PlayerModule} from './models/player/player.module';
-import { GenderModule } from './models/gender/gender.module';
-import { AssociationModule } from './models/association/association.module';
-import { ClubModule } from './models/club/club.module';
+import {GenderModule} from './models/gender/gender.module';
+import {AssociationModule} from './models/association/association.module';
+import {ClubModule} from './models/club/club.module';
 
 @Module({
     imports: [
@@ -17,11 +17,11 @@ import { ClubModule } from './models/club/club.module';
             imports: [ConfigModule],
             useFactory: (configService: ConfigService) => ({
                 type: 'mysql',
-                host: configService.get<string>('MYSQL_HOST'),
-                port: configService.get<number>('MYSQL_PORT'),
-                username: configService.get<string>('MYSQL_USER'),
-                password: configService.get<string>('MYSQL_PASSWORD'),
-                database: configService.get<string>('MYSQL_DATABASE'),
+                host: configService.get<string>('POSTGRES_HOST'),
+                port: 3306,
+                username: configService.get<string>('POSTGRES_USER'),
+                password: configService.get<string>('POSTGRES_PASSWORD'),
+                database: configService.get<string>('POSTGRES_DATABASE'),
                 entities: [__dirname + "/**/*.entity{.ts,.js}"],
                 synchronize: true
             }),
